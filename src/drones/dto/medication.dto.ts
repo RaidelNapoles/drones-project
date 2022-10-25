@@ -1,16 +1,19 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Matches } from 'class-validator';
+import { Type } from 'class-transformer';
+import { IsNumber, Matches } from 'class-validator';
 
 export class MedicationDto {
   @ApiProperty()
-  // eslint-disable-next-line prettier/prettier
-  @Matches(new RegExp('^w+d+-+_+$'))
+  @Matches(new RegExp('^[a-zA-Z]*[0-9]*[-_]*$'))
   name: string;
 
   @ApiProperty()
+  @Type(() => Number)
+  @IsNumber()
   weight: number;
 
   @ApiProperty()
+  @Matches(new RegExp('^[A-Z]*[0-9]*[_]*$'))
   code: string;
 
   @ApiProperty()
