@@ -4,6 +4,7 @@ import { MedicationEntity } from './../entities/medication.entity';
 import { DroneEntity } from './../entities/drone.entity';
 import {
   BadRequestException,
+  HttpException,
   Injectable,
   NotFoundException,
 } from '@nestjs/common';
@@ -27,11 +28,22 @@ export class DroneService {
     return drone;
   }
 
+  //Register a drone
   async createDrone(droneDto: DroneDto): Promise<DroneEntity> {
+    const found = await this._droneRepository.find({
+      where: { serial: droneDto.serial },
+    });
+    if (found) {
+      throw new HttpException(
+        'Already exits a drone with the same serial number',
+        500,
+      );
+    }
     const newDrone = { ...new DroneEntity(), ...droneDto };
     return this._droneRepository.save(newDrone);
   }
 
+  //Load a drone with medication items
   async loadMedication(droneId: number, medicationItem: MedicationDto) {
     const drone = await this.findOne(droneId);
     if (drone.available_weight < medicationItem.weight) {

@@ -1,6 +1,6 @@
 import { DroneState } from './../enums/drone-state.enum';
 import { DroneModel } from './../enums/drone-model.enum';
-import { IsEnum, IsNumber, Max, MaxLength } from 'class-validator';
+import { IsEnum, IsInt, Max, MaxLength } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 
@@ -18,7 +18,7 @@ export class DroneDto {
 
   @ApiProperty()
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   @Max(500)
   weight_limit: number;
 
@@ -26,7 +26,7 @@ export class DroneDto {
 
   @ApiProperty()
   @Type(() => Number)
-  @IsNumber()
+  @IsInt()
   battery_capacity: number;
 
   @ApiProperty({
