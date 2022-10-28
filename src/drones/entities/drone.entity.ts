@@ -18,7 +18,7 @@ export class DroneEntity {
   weight_limit: number;
 
   @Column()
-  available_weight: number;
+  remaining_weight_capacity: number;
 
   @Column()
   battery_capacity: number;

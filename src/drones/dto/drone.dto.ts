@@ -16,15 +16,15 @@ export class DroneDto {
   @IsEnum(DroneModel)
   model: DroneModel;
 
-  @ApiProperty()
+  @ApiProperty({ default: 500 })
   @Type(() => Number)
   @IsInt()
   @Max(500)
   weight_limit: number;
 
-  available_weight: number;
+  remaining_weight_capacity: number;
 
-  @ApiProperty()
+  @ApiProperty({ default: 100 })
   @Type(() => Number)
   @IsInt()
   battery_capacity: number;

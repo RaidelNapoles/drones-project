@@ -3,8 +3,8 @@ import { ApiProperty } from '@nestjs/swagger';
 import { IsArray, ValidateNested } from 'class-validator';
 
 export class MedicationArray {
-  @ApiProperty()
+  @ApiProperty({ type: [MedicationDto] })
   @IsArray()
   @ValidateNested({ each: true })
-  data_list: MedicationDto[];
+  medication_items: MedicationDto[];
 }

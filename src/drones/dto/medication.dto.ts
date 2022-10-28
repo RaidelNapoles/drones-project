@@ -1,4 +1,4 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { ApiHideProperty, ApiProperty } from '@nestjs/swagger';
 import { Type } from 'class-transformer';
 import { IsNumber, Matches } from 'class-validator';
 
@@ -16,6 +16,9 @@ export class MedicationDto {
   @Matches(new RegExp('^[A-Z]*[0-9]*[_]*$'))
   code: string;
 
-  @ApiProperty()
-  image: string;
+  @ApiHideProperty()
+  image_path?: string;
+
+  @ApiProperty({ type: 'string', format: 'binary' })
+  image_file: any;
 }
