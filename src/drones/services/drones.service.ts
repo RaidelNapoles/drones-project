@@ -1,3 +1,4 @@
+import { MedicationArray } from './../dto/medication_array.dto';
 import { MedicationDto } from './../dto/medication.dto';
 import { DroneDto } from './../dto/drone.dto';
 import { MedicationEntity } from './../entities/medication.entity';
@@ -16,8 +17,6 @@ export class DroneService {
   constructor(
     @InjectRepository(DroneEntity)
     private readonly _droneRepository: Repository<DroneEntity>,
-    @InjectRepository(MedicationEntity)
-    private readonly _medicationRepository: Repository<MedicationEntity>,
   ) {}
 
   async findOne(droneId: number): Promise<DroneEntity> {
@@ -54,14 +53,18 @@ export class DroneService {
   }
 
   //Load a drone with medication items
-  async loadMedication(droneId: number, medicationItems: MedicationDto[]) {
+  async loadMedication(droneId: number, medicationItems: MedicationArray) {
     const drone = await this.findOne(droneId);
+
+    //Preventing the drone from being in LOADING state if the battery level is **below 25%**
     if (drone.battery_capacity < 25) {
       throw new BadRequestException(
         `Drone battery is below 25%!! It can't be loaded!!`,
       );
     }
-    const med_weights = medicationItems
+
+    //Preventing the drone from being loaded with more weight that it can carry
+    const med_weights = medicationItems.data_list
       .map((item) => item.weight)
       .reduce((it1, it2) => it1 + it2);
     if (drone.available_weight < med_weights) {
@@ -69,9 +72,10 @@ export class DroneService {
         `Trying to exceed the drone weight limit!!`,
       );
     }
+
     drone.available_weight -= med_weights;
     drone.state = DroneState.LOADING;
-    medicationItems.forEach((item) => {
+    medicationItems.data_list.forEach((item) => {
       drone.loaded_medication.push({ ...new MedicationEntity(), ...item });
     });
     return this._droneRepository.save(drone);

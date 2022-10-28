@@ -5,7 +5,6 @@ export const env = (name: string, default_value?) => {
   if (!defined(default_value) && !defined(v)) {
     console.error(`Missing environment variable: "${name}"`);
     process.exit(0);
-    throw new Error(`Missing environment variable: "${name}"`);
   }
 
   return v ?? default_value;

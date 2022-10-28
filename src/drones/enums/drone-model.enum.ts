@@ -1,6 +1,6 @@
 export enum DroneModel {
-  Lightweight,
-  Middleweight,
-  Cruiserweight,
-  Heavyweight,
+  Lightweight = 'Lightweight',
+  Middleweight = 'Middleweight',
+  Cruiserweight = 'Cruiserweight',
+  Heavyweight = 'Heavyweight',
 }

@@ -9,7 +9,6 @@ async function bootstrap() {
     .setTitle('Drone Project')
     .setDescription('REST API to manage a drones fleet')
     .setVersion('1.0')
-    .addTag('dron')
     .build();
   const document = SwaggerModule.createDocument(app, config);
   SwaggerModule.setup('api', app, document);
