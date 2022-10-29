@@ -25,12 +25,13 @@
     "typeorm:run": "npm run typeorm migration:run",
     "typeorm:revert": "npm run typeorm migration:revert",
     "typeorm:show": "npm run typeorm migration:show",
-    "start_run": "npm run typeorm migration:run && nest start"
+    "start_run": "npm run typeorm migration:run && nest start --watch"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
     "@nestjs/core": "^9.0.0",
     "@nestjs/platform-express": "^9.0.0",
+    "@nestjs/schedule": "^2.1.0",
     "@nestjs/swagger": "^6.1.2",
     "@nestjs/typeorm": "^9.0.1",
     "class-transformer": "^0.5.1",
@@ -45,6 +46,7 @@
     "@nestjs/cli": "^9.0.0",
     "@nestjs/schematics": "^9.0.0",
     "@nestjs/testing": "^9.0.0",
+    "@types/cron": "^2.0.0",
     "@types/express": "^4.17.13",
     "@types/jest": "28.1.8",
     "@types/multer": "^1.4.7",

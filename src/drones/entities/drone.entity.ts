@@ -28,6 +28,7 @@ export class DroneEntity {
 
   @OneToMany(() => MedicationEntity, (medication) => medication.drone_host, {
     cascade: true,
+    onDelete: 'CASCADE',
   })
   loaded_medication: MedicationEntity[];
 }

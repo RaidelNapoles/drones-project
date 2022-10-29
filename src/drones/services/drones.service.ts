@@ -5,26 +5,32 @@ import { DroneEntity } from './../entities/drone.entity';
 import {
   BadRequestException,
   Injectable,
+  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
 import { DroneState } from '../enums/drone-state.enum';
+import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class DroneService {
+  private readonly logger = new Logger(DroneService.name);
+
   constructor(
     @InjectRepository(DroneEntity)
     private readonly _droneRepository: Repository<DroneEntity>,
   ) {}
 
   async recalculateWeightCapacity(drone: DroneEntity) {
-    const loadedWeight = drone.loaded_medication
-      .map((item) => item.weight)
-      .reduce((it1, it2) => it1 + it2);
-    if (loadedWeight) {
-      drone.remaining_weight_capacity = drone.weight_limit - loadedWeight;
-      await this._droneRepository.save(drone);
+    if (drone.loaded_medication.length > 0) {
+      const loadedWeight = drone.loaded_medication
+        .map((item) => item.weight)
+        .reduce((it1, it2) => it1 + it2);
+      if (loadedWeight) {
+        drone.remaining_weight_capacity = drone.weight_limit - loadedWeight;
+        await this._droneRepository.save(drone);
+      }
     }
   }
 
@@ -133,5 +139,20 @@ export class DroneService {
   async checkBatteryLevel(droneId: number) {
     const drone = await this.findOne(droneId);
     return drone.battery_capacity;
+  }
+
+  //This function checks drones battery capacity every 10 seconds. Each time this function is executed, drones' battery capacity decrease by 1 (simulation)
+  @Cron(CronExpression.EVERY_5_SECONDS)
+  async checkAllBatteryLevel() {
+    const drones = await this.findAll();
+    for (let index = 0; index < drones.length; index++) {
+      if (drones[index].battery_capacity > 0) {
+        drones[index].battery_capacity -= 1;
+      }
+      const drone = await this._droneRepository.save(drones[index]);
+      this.logger.debug(
+        `drone ${drone.id} has ${drone.battery_capacity}% of battery`,
+      );
+    }
   }
 }
