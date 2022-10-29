@@ -2,6 +2,7 @@
 /dist
 /node_modules
 /med_pictures
+/logging
 
 # Logs
 logs

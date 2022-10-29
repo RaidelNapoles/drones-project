@@ -1,3 +1,4 @@
+import { MyLogger } from './../helpers/logger_custom';
 import { MedicationDto } from './../dto/medication.dto';
 import { DroneDto } from './../dto/drone.dto';
 import { MedicationEntity } from './../entities/medication.entity';
@@ -5,7 +6,6 @@ import { DroneEntity } from './../entities/drone.entity';
 import {
   BadRequestException,
   Injectable,
-  Logger,
   NotFoundException,
 } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -15,7 +15,7 @@ import { Cron, CronExpression } from '@nestjs/schedule';
 
 @Injectable()
 export class DroneService {
-  private readonly logger = new Logger(DroneService.name);
+  private readonly logger = new MyLogger(DroneService.name);
 
   constructor(
     @InjectRepository(DroneEntity)
@@ -142,7 +142,7 @@ export class DroneService {
   }
 
   //This function checks drones battery capacity every 10 seconds. Each time this function is executed, drones' battery capacity decrease by 1 (simulation)
-  @Cron(CronExpression.EVERY_5_SECONDS)
+  @Cron(CronExpression.EVERY_10_SECONDS)
   async checkAllBatteryLevel() {
     const drones = await this.findAll();
     for (let index = 0; index < drones.length; index++) {
