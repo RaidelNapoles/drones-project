@@ -25,7 +25,10 @@ export class DroneService {
   }
 
   async findOne(droneId: number): Promise<DroneEntity> {
-    const drone = await this._droneRepository.findOneBy({ id: droneId });
+    const drone = await this._droneRepository.findOne({
+      where: { id: droneId },
+      relations: { loaded_medication: true },
+    });
     if (!drone) {
       throw new NotFoundException(`Could'n find drone with id ${droneId}`);
     }
@@ -77,6 +80,7 @@ export class DroneService {
 
     drone.remaining_weight_capacity -= medicationItem.weight;
     drone.state = DroneState.LOADING;
+    delete medicationItem['file'];
     drone.loaded_medication.push({
       ...new MedicationEntity(),
       ...medicationItem,

@@ -20,5 +20,5 @@ export class MedicationDto {
   image_path?: string;
 
   @ApiProperty({ type: 'string', format: 'binary' })
-  image_file: any;
+  file?: any;
 }

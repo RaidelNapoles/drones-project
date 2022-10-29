@@ -13,8 +13,9 @@ import {
 } from '@nestjs/common';
 import { MedicationDto } from '../dto/medication.dto';
 import { FileInterceptor } from '@nestjs/platform-express';
-import { diskStorage } from 'multer';
 import { ApiConsumes } from '@nestjs/swagger';
+import { diskStorage } from 'multer';
+import { Helper } from '../helpers/helper';
 
 @Controller()
 export class DroneController {
@@ -42,7 +43,8 @@ export class DroneController {
   @UseInterceptors(
     FileInterceptor('file', {
       storage: diskStorage({
-        destination: './medicationPictures',
+        destination: Helper.destinationPath,
+        filename: Helper.fileName,
       }),
     }),
   )

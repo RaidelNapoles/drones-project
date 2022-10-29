@@ -16,7 +16,7 @@ export class MedicationEntity {
   code: string;
 
   @Column()
-  image: string;
+  image_path: string;
 
   @ManyToOne(() => DroneEntity, (drone) => drone.loaded_medication)
   drone_host: DroneEntity;
