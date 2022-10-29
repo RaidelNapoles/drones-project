@@ -18,6 +18,8 @@ export class MedicationEntity {
   @Column()
   image_path: string;
 
-  @ManyToOne(() => DroneEntity, (drone) => drone.loaded_medication)
+  @ManyToOne(() => DroneEntity, (drone) => drone.loaded_medication, {
+    onDelete: 'CASCADE',
+  })
   drone_host: DroneEntity;
 }

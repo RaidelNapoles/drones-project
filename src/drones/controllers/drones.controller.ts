@@ -72,7 +72,7 @@ export class DroneController {
 
   @Get('check_available_drones_for_loading')
   async check_available_drones_for_loading() {
-    return await this.check_available_drones_for_loading();
+    return await this._drone_service.checkDronesAvailableForLoading();
   }
 
   @Get('check_battery_level/:id')
