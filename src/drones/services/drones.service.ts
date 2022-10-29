@@ -18,10 +18,22 @@ export class DroneService {
     private readonly _droneRepository: Repository<DroneEntity>,
   ) {}
 
+  async recalculateWeightCapacity(drone: DroneEntity) {
+    const loadedWeight = drone.loaded_medication
+      .map((item) => item.weight)
+      .reduce((it1, it2) => it1 + it2);
+    if (loadedWeight) {
+      drone.remaining_weight_capacity = drone.weight_limit - loadedWeight;
+      await this._droneRepository.save(drone);
+    }
+  }
+
   async findAll(): Promise<DroneEntity[]> {
-    return await this._droneRepository.find({
+    const drones = await this._droneRepository.find({
       relations: { loaded_medication: true },
     });
+    drones.forEach((drone) => this.recalculateWeightCapacity(drone));
+    return drones;
   }
 
   async findOne(droneId: number): Promise<DroneEntity> {
@@ -32,6 +44,7 @@ export class DroneService {
     if (!drone) {
       throw new NotFoundException(`Could'n find drone with id ${droneId}`);
     }
+    this.recalculateWeightCapacity(drone);
     return drone;
   }
 
@@ -58,6 +71,14 @@ export class DroneService {
     let drone = await this.findOne(droneId);
     drone = { ...drone, ...droneDto };
     return this._droneRepository.save(drone);
+  }
+
+  async deleteDrone(droneId: number) {
+    const drone = await this.findOne(droneId);
+    if (!drone) {
+      throw new NotFoundException(`Could'n find drone with id ${droneId}`);
+    }
+    await this._droneRepository.delete(droneId);
   }
 
   //Load a drone with medication items

@@ -4,6 +4,7 @@ import { DroneDto } from './../dto/drone.dto';
 import {
   Body,
   Controller,
+  Delete,
   Get,
   Param,
   Post,
@@ -37,6 +38,11 @@ export class DroneController {
     @Body() droneDto: DroneUpdateDto,
   ) {
     return await this._drone_service.updateDrone(droneId, droneDto);
+  }
+
+  @Delete('drone_delete/:id')
+  async drone_delete(@Param('id') droneId: number) {
+    return await this._drone_service.deleteDrone(droneId);
   }
 
   @Put('load_medication/:id')

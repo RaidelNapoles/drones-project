@@ -4,7 +4,9 @@ import { IsNumber, Matches } from 'class-validator';
 
 export class MedicationDto {
   @ApiProperty()
-  @Matches(new RegExp('^[a-zA-Z]*[0-9]*[-_]*$'))
+  @Matches(new RegExp('^[a-zA-Z0-9-_]+$'), {
+    message: "Only letters, numbers, '-' and '_' characters are allowed",
+  })
   name: string;
 
   @ApiProperty()
@@ -13,7 +15,9 @@ export class MedicationDto {
   weight: number;
 
   @ApiProperty()
-  @Matches(new RegExp('^[A-Z]*[0-9]*[_]*$'))
+  @Matches(new RegExp('^[A-Z0-9_]+$'), {
+    message: "Only uppercase letters, numbers and '_' characters are allowed",
+  })
   code: string;
 
   @ApiHideProperty()

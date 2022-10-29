@@ -24,7 +24,8 @@
     "typeorm:create": "npx ts-node -r tsconfig-paths/register ./node_modules/typeorm/cli.js migration:create",
     "typeorm:run": "npm run typeorm migration:run",
     "typeorm:revert": "npm run typeorm migration:revert",
-    "typeorm:show": "npm run typeorm migration:show"
+    "typeorm:show": "npm run typeorm migration:show",
+    "start_run": "npm run typeorm migration:run && nest start"
   },
   "dependencies": {
     "@nestjs/common": "^9.0.0",
